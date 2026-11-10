@@ -74,9 +74,9 @@ version_info = ({})
 
 
 def get_version():
-    with open(version_file, 'r') as f:
-        exec(compile(f.read(), version_file, 'exec'))
-    return locals()['__version__']
+    with open('VERSION', 'r') as f:
+        SHORT_VERSION = f.read().strip()
+    return SHORT_VERSION
 
 
 def make_cuda_ext(name, module, sources, sources_cuda=None):
@@ -139,9 +139,11 @@ if __name__ == '__main__':
                 sources_cuda=['src/upfirdn2d_kernel.cu']),
         ]
         setup_kwargs = dict(cmdclass={'build_ext': BuildExtension})
+        sn=['cython', 'numpy', 'torch']
     else:
         ext_modules = []
         setup_kwargs = dict()
+        sn=[]
 
     write_version_py()
     setup(
@@ -165,7 +167,7 @@ if __name__ == '__main__':
             'Programming Language :: Python :: 3.8',
         ],
         license='Apache License 2.0',
-        setup_requires=['cython', 'numpy', 'torch'],
+        setup_requires=sn,
         install_requires=get_requirements(),
         ext_modules=ext_modules,
         zip_safe=False,
